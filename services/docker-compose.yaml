@@ -1,0 +1,29 @@
+version: "2"
+
+services:
+    emails:
+        build: ./emails
+        command: bash -c "python3 ./emails/manage.py makemigrations && python3 ./emails/manage.py migrate && python3 ./emails/manage.py runserver 0.0.0.0:8001"
+        volumes:
+            - .:/code
+        ports:
+            - 8001:8001
+        restart: always
+
+    products:
+        build: ./products
+        command: bash -c "python3 ./products/manage.py makemigrations && python3 ./products/manage.py migrate && python3 ./products/manage.py runserver 0.0.0.0:8002"
+        volumes:
+            - .:/code
+        ports:
+            - 8002:8002
+        restart: always
+
+    orders:
+        build: ./orders
+        command: bash -c "python3 ./orders/manage.py makemigrations && python3 ./orders/manage.py migrate && python3 ./orders/manage.py runserver 0.0.0.0:8003"
+        volumes:
+            - .:/code
+        ports:
+            - 8003:8003
+        restart: always
