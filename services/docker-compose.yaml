@@ -3,27 +3,77 @@ version: "2"
 services:
     emails:
         build: ./emails
-        command: bash -c "python3 ./emails/manage.py makemigrations && python3 ./emails/manage.py migrate && python3 ./emails/manage.py runserver 0.0.0.0:8001"
+        command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8001"
         volumes:
-            - .:/code
+            - ./emails:/app
         ports:
             - 8001:8001
         restart: always
+        depends_on:
+            - emails_db
 
     products:
         build: ./products
-        command: bash -c "python3 ./products/manage.py makemigrations && python3 ./products/manage.py migrate && python3 ./products/manage.py runserver 0.0.0.0:8002"
+        command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8002"
         volumes:
-            - .:/code
+            - ./products:/app
         ports:
             - 8002:8002
         restart: always
 
     orders:
         build: ./orders
-        command: bash -c "python3 ./orders/manage.py makemigrations && python3 ./orders/manage.py migrate && python3 ./orders/manage.py runserver 0.0.0.0:8003"
+        command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8003"
         volumes:
-            - .:/code
+            - ./orders:/app
         ports:
             - 8003:8003
         restart: always
+        depends_on:
+            - orders_db
+
+    emails_db:
+        image: mysql:5.7.22
+        restart: always
+        environment:
+            MYSQL_DATABASE: admin
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - .mysql_data/emails_data:/var/lib/mysql
+        ports:
+            - 33066:3306
+
+    orders_db:
+        image: mysql:5.7.22
+        restart: always
+        environment:
+            MYSQL_DATABASE: admin
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - .mysql_data/orders_data:/var/lib/mysql
+        ports:
+            - 33067:3306
+
+    products_db:
+        image: mysql:5.7.22
+        restart: always
+        environment:
+            MYSQL_DATABASE: admin
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - .mysql_data/products_data:/var/lib/mysql
+        ports:
+            - 33068:3306
+
+    rabbitmq:
+        image: "rabbitmq:management"
+        ports:
+            - "15672:15672" # RabbitMQ management UI
+            - "5672:5672" # RabbitMQ default port
+
