@@ -36,6 +36,10 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+# MySQL Database
+.mysql_data
+
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
