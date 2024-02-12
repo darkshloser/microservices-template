@@ -6,3 +6,4 @@ mysqlclient
 django-mysql
 django-cors-headers
 pika
+configparser

@@ -76,15 +76,19 @@ WSGI_APPLICATION = 'products.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'admin',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'orders_db',
-        'PORT': '3306',
+        'NAME': config['DATABASE']['NAME'],
+        'USER': config['DATABASE']['USER'],
+        'PASSWORD': config['DATABASE']['PASSWORD'],
+        'HOST': config['DATABASE']['HOST'],
+        'PORT': config['DATABASE']['PORT'],
         'OPTIONS': {
             'charset': 'utf8mb4',      # Use utf8mb4 to support emojis and other characters
         },
